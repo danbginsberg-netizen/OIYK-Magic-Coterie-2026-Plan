@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OIYK MAGIC — Master Plan</title>
+<style>
+  :root {
+    --oiyk-cream: #F5EDE1;
+    --oiyk-light: #FBF6EC;
+    --oiyk-gold: #A07A3A;
+    --oiyk-gold-deep: #8B6730;
+    --oiyk-ink: #1F1B17;
+    --oiyk-violet: #DDC9DC;
+    --oiyk-sand: #E8DDC8;
+    --oiyk-red: #B33333;
+    --oiyk-green: #2d5826;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #FBF6EC; }
+  body {
+    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: var(--oiyk-ink);
+    line-height: 1.55;
+  }
+  .slide { padding: 40px 48px; max-width: 1780px; margin: 0 auto; background: #FFFFFF; }
+  .slide + .slide { border-top: 4px solid var(--oiyk-cream); margin-top: 20px; }
+
+  .doc-header {
+    text-align: center;
+    padding: 30px 0 20px;
+    background: linear-gradient(135deg, var(--oiyk-cream) 0%, var(--oiyk-violet) 100%);
+    border-radius: 8px;
+    margin-bottom: 24px;
+  }
+  .doc-header h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 34pt; margin: 0; color: var(--oiyk-ink);
+    letter-spacing: -0.5pt; font-weight: 500;
+  }
+  .doc-header .subtitle {
+    font-family: Georgia, serif; font-style: italic; font-size: 13pt;
+    color: var(--oiyk-gold-deep); margin-top: 8px;
+  }
+  .doc-header .metatag {
+    display: inline-block; background: rgba(255,255,255,0.7);
+    padding: 4px 14px; border-radius: 12px; font-size: 10.5pt;
+    color: var(--oiyk-gold-deep); margin-top: 12px; font-weight: 600;
+  }
+
+  h2 {
+    font-family: Georgia, serif; font-size: 22pt; color: var(--oiyk-gold);
+    margin: 0 0 12px; font-weight: 500;
+    border-bottom: 2px solid var(--oiyk-gold); padding-bottom: 8px;
+  }
+  h3 { font-family: Georgia, serif; font-size: 15pt; margin: 20px 0 8px; }
+  h4 { font-family: Georgia, serif; font-size: 12pt; margin: 12px 0 6px; color: var(--oiyk-gold-deep); }
+
+  .gantt-wrapper {
+    background: #FFFFFF; border: 1px solid var(--oiyk-sand); border-radius: 6px;
+    padding: 8px; margin: 12px 0; overflow-x: auto;
+  }
+  .gantt-svg { display: block; width: 100%; height: auto; min-width: 1400px; }
+
+  .gantt-legend {
+    display: flex; flex-wrap: wrap; gap: 16px; margin: 14px 0;
+    padding: 12px 16px; background: var(--oiyk-light); border-radius: 6px;
+  }
+  .gantt-legend .item { display: flex; align-items: center; gap: 8px; font-size: 11pt; }
+  .gantt-legend .dot { width: 14px; height: 14px; border-radius: 50%; }
+
+  .milestone-legend {
+    display: flex; gap: 24px; margin: 6px 0 20px; padding-left: 8px;
+    font-size: 10.5pt; color: var(--oiyk-gold-deep); font-style: italic;
+  }
+  .diamond { display: inline-block; width: 14px; height: 14px; transform: rotate(45deg); vertical-align: middle; }
+  .diamond.hard { background: var(--oiyk-red); }
+  .diamond.soft { background: var(--oiyk-gold-deep); }
+
+  .week-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 18px; margin-top: 16px;
+  }
+  .week-card {
+    background: #FFFFFF; border: 1.5px solid var(--oiyk-sand); border-radius: 8px;
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .week-card.priority-critical { border-color: var(--oiyk-red); border-width: 2px; }
+  .week-card.priority-high { border-color: var(--oiyk-gold); border-width: 2px; }
+  .week-card.priority-med { border-color: var(--oiyk-gold-deep); }
+  .week-header { background: var(--oiyk-cream); padding: 14px 18px 12px; border-bottom: 1px solid var(--oiyk-sand); }
+  .priority-critical .week-header { background: linear-gradient(135deg, #FBE9E9, #FFE2B8); }
+  .priority-high .week-header { background: linear-gradient(135deg, var(--oiyk-cream), #FFE2B8); }
+  .week-num { font-size: 9pt; font-weight: 700; letter-spacing: 0.16em; color: var(--oiyk-gold-deep); text-transform: uppercase; }
+  .week-name { font-family: Georgia, serif; font-size: 16pt; font-weight: 600; color: var(--oiyk-ink); margin: 4px 0 2px; }
+  .week-vibe { font-size: 10.5pt; color: var(--oiyk-gold-deep); font-style: italic; }
+  .week-body { padding: 8px 18px 14px; flex: 1; }
+  .week-section {
+    margin: 10px 0 6px; color: var(--oiyk-gold-deep);
+    font-family: Georgia, serif; font-size: 11pt; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    border-bottom: 1px dashed var(--oiyk-sand); padding-bottom: 4px;
+  }
+  .week-actions { list-style: none; padding: 0; margin: 4px 0 0; }
+  .week-actions li { padding: 6px 0; border-bottom: 1px solid #F5EDE1; font-size: 11pt; }
+  .week-actions li:last-child { border-bottom: none; }
+  .action { font-weight: 600; color: var(--oiyk-ink); }
+  .action-note { font-size: 10pt; color: var(--oiyk-gold-deep); margin-top: 3px; line-height: 1.4; }
+  .inline-link {
+    display: inline-block; padding: 1px 8px; background: var(--oiyk-gold);
+    color: #FFFFFF; border-radius: 10px; font-size: 9pt; text-decoration: none;
+    font-weight: 600; letter-spacing: 0.04em;
+  }
+  .inline-link:hover { background: var(--oiyk-gold-deep); }
+
+  .info-panel {
+    background: var(--oiyk-light); border: 1.5px solid var(--oiyk-gold);
+    border-radius: 8px; padding: 18px 24px; margin: 24px 0;
+  }
+  .info-panel-label {
+    font-size: 10pt; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--oiyk-gold-deep); font-weight: 700; margin-bottom: 6px;
+  }
+  .shipping-panel { background: linear-gradient(135deg, #D5E3EE, #F5EDE1); border-color: #4A7A9C; }
+  .ikea-panel { background: linear-gradient(135deg, #FFF4DF, #F4E8F4); border-color: var(--oiyk-gold); }
+
+  .two-col-tight { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+
+  .quick-links {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px; margin-top: 14px;
+  }
+  .quick-link {
+    background: var(--oiyk-light); border: 1.5px solid var(--oiyk-sand);
+    border-radius: 6px; padding: 12px 16px; text-decoration: none;
+    color: var(--oiyk-ink); transition: all 0.15s; display: block;
+  }
+  .quick-link:hover {
+    background: var(--oiyk-cream); border-color: var(--oiyk-gold);
+    transform: translateY(-1px);
+  }
+  .ql-title { font-family: Georgia, serif; font-size: 12pt; font-weight: 700; color: var(--oiyk-gold); margin-bottom: 4px; }
+  .ql-desc { font-size: 10.5pt; color: var(--oiyk-gold-deep); }
+
+  .contact-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 11pt; }
+  .contact-table th {
+    background: var(--oiyk-ink); color: var(--oiyk-cream);
+    padding: 8px 12px; text-align: left; font-size: 10pt;
+    text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;
+  }
+  .contact-table td { border-bottom: 1px solid var(--oiyk-sand); padding: 8px 12px; }
+  .contact-table tr:nth-child(even) td { background: var(--oiyk-light); }
+
+  .doc-footer {
+    margin-top: 40px; padding: 20px 0; border-top: 1px solid var(--oiyk-sand);
+    text-align: center; color: var(--oiyk-gold-deep); font-size: 10.5pt; font-style: italic;
+  }
+
+  @media print {
+    body { background: #FFFFFF; }
+    .slide { padding: 20px 30px; max-width: none; }
+    .slide + .slide { page-break-before: always; border-top: none; }
+    .two-col-tight { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- =============== SLIDE 1: GANTT =============== -->
+<section class="slide">
+
+<div class="doc-header">
+<h1>OIYK at MAGIC — Master Plan</h1>
+<div class="subtitle">Jul 1 · Aug 10–12 (Las Vegas) · Sep 9–11 (New York, Edition @ Coterie)</div>
+<div class="metatag">Living doc · shareable with Kate + team · updated Jul 1 PM</div>
+</div>
+
+<h2>Timeline · high-level Gantt</h2>
+
+<div class="gantt-wrapper">
+<svg viewBox="0 0 1700 676" xmlns="http://www.w3.org/2000/svg" class="gantt-svg">
+<rect x="0" y="0" width="1700" height="676" fill="#FFFFFF"/>
+<rect x="0" y="0" width="1700" height="90" fill="#F5EDE1"/>
+<rect x="0" y="89" width="1700" height="2" fill="#A07A3A"/>
+<text x="259.3" y="35" font-size="12" font-weight="700" text-anchor="middle" fill="#1F1B17" font-family="system-ui,sans-serif">Week 1</text>
+<text x="259.3" y="55" font-size="10" text-anchor="middle" fill="#8B6730" font-family="system-ui,sans-serif" font-style="italic">Jul 1–5</text>
+<line x1="308.6" y1="90" x2="308.6" y2="586" stroke="#E8DDC8" stroke-width="1"/>
+<text x="377.7" y="35" font-size="12" font-weight="700" text-anchor="middle" fill="#1F1B17" font-family="system-ui,sans-serif">Week 2</text>
+<text x="377.7" y="55" font-size="10" text-anchor="middle" fill="#8B6730" font-family="system-ui,sans-serif" font-style="italic">Jul 6–12</text>
+<line x1="446.8" y1="90" x2="446.8" y2="586" stroke="#E8DDC8" stroke-width="1"/>
+<text x="515.8" y="35" font-size="12" font-weight="700" text-anchor="middle" fill="#1F1B17" font-family="system-ui,sans-serif">Week 3</text>
+<text x="515.8" y="55" font-size="10" text-anchor="middle" fill="#8B6730" font-family="system-ui,sans-serif" font-style="italic">Jul 13–19</text>
+<line x1="584.9" y1="90" x2="584.9" y2="586" stroke="#E8DDC8" stroke-width="1"/>
+<text x="653.9" y="35" font-size="12" font-weight="700" text-anchor="middle" fill="#1F1B17" font-family="system-ui,sans-serif">Week 4</text>
+<text x="653.9" y="55" font-size="10" text-anchor="middle" fill="#8B6730" font-family="system-ui,sans-serif" font-style="italic">Jul 20–26</text>
+<line x1="723.0" y1="90" x2="723.0" y2="586" stroke="#E8DDC8" stroke-width="1"/>
+<text x="792.0" y="35" font-size="12" font-weight="700" text-anchor="middle" fill="#1F1B17" font-family="system-ui,sans-serif">Week 5</text>
+<text x="792.0" y="55" font-size="10" text-anchor="middle" fill="#8B6730" font-family="system-ui,sans-serif" font-style="italic">Jul 27–2</text>
+<line x1="861.1" y1="90" x2="861.1" y2="586" stroke="#E8DDC8" stroke-width="1"/>
+<text x="930.1" y="35" font-size="12" font-weight="700" text-anchor="middle" fill="#1F1B17" font-family="system-ui,sans-serif">Week 6</text>
+<text x="930.1" y="55" font-size="10" text-anchor="middle" fill="#8B6730" font-family="system-ui,sans-serif" font-style="italic">Aug 3–9</text>
+<line x1="999.2" y1="90" x2="999.2" y2="586" stroke="#E8DDC8" stroke-width="1"/>
+<text x="1068.2" y="35" font-size="12" font-weight="700" text-anchor="middle" fill="#1F1B17" font-family="system-ui,sans-serif">Week 7 · LV</text>
+<text x="1068.2" y="55" font-size="10" text-anchor="middle" fill="#8B6730" font-family="system-ui,sans-serif" font-style="italic">Aug 10–16</text>
+<line x1="1137.3" y1="90" x2="1137.3" y2="586" stroke="#E8DDC8" stroke-width="1"/>
+<text x="1206.4" y="35" font-size="12" font-weight="700" text-anchor="middle" fill="#1F1B17" font-family="system-ui,sans-serif">Week 8</text>
+<text x="1206.4" y="55" font-size="10" text-anchor="middle" fill="#8B6730" font-family="system-ui,sans-serif" font-style="italic">Aug 17–23</text>
+<line x1="1275.4" y1="90" x2="1275.4" y2="586" stroke="#E8DDC8" stroke-width="1"/>
+<text x="1344.5" y="35" font-size="12" font-weight="700" text-anchor="middle" fill="#1F1B17" font-family="system-ui,sans-serif">Week 9</text>
+<text x="1344.5" y="55" font-size="10" text-anchor="middle" fill="#8B6730" font-family="system-ui,sans-serif" font-style="italic">Aug 24–30</text>
+<line x1="1413.5" y1="90" x2="1413.5" y2="586" stroke="#E8DDC8" stroke-width="1"/>
+<text x="1482.6" y="35" font-size="12" font-weight="700" text-anchor="middle" fill="#1F1B17" font-family="system-ui,sans-serif">Wk 10</text>
+<text x="1482.6" y="55" font-size="10" text-anchor="middle" fill="#8B6730" font-family="system-ui,sans-serif" font-style="italic">Aug 31–6</text>
+<line x1="1551.6" y1="90" x2="1551.6" y2="586" stroke="#E8DDC8" stroke-width="1"/>
+<text x="1620.7" y="35" font-size="12" font-weight="700" text-anchor="middle" fill="#1F1B17" font-family="system-ui,sans-serif">Wk 11 · NY</text>
+<text x="1620.7" y="55" font-size="10" text-anchor="middle" fill="#8B6730" font-family="system-ui,sans-serif" font-style="italic">Sep 7–13</text>
+<line x1="1670.0" y1="90" x2="1670.0" y2="586" stroke="#E8DDC8" stroke-width="1"/>
+<rect x="0" y="90" width="210" height="62" fill="#A07A3A" opacity="0.1"/>
+<rect x="210" y="90" width="1460.0" height="62" fill="#FBF6EC"/>
+<line x1="0" y1="152" x2="1700" y2="152" stroke="#E8DDC8" stroke-width="1"/>
+<circle cx="20" cy="121.0" r="7" fill="#A07A3A"/>
+<text x="38" y="125.0" font-size="13" font-weight="600" fill="#1F1B17" font-family="system-ui,sans-serif">Payment & Finance</text>
+<rect x="0" y="152" width="210" height="62" fill="#B590B5" opacity="0.1"/>
+<rect x="210" y="152" width="1460.0" height="62" fill="#FFFFFF"/>
+<line x1="0" y1="214" x2="1700" y2="214" stroke="#E8DDC8" stroke-width="1"/>
+<circle cx="20" cy="183.0" r="7" fill="#B590B5"/>
+<text x="38" y="187.0" font-size="13" font-weight="600" fill="#1F1B17" font-family="system-ui,sans-serif">Samples & Product</text>
+<rect x="0" y="214" width="210" height="62" fill="#5E7F94" opacity="0.1"/>
+<rect x="210" y="214" width="1460.0" height="62" fill="#FBF6EC"/>
+<line x1="0" y1="276" x2="1700" y2="276" stroke="#E8DDC8" stroke-width="1"/>
+<circle cx="20" cy="245.0" r="7" fill="#5E7F94"/>
+<text x="38" y="249.0" font-size="13" font-weight="600" fill="#1F1B17" font-family="system-ui,sans-serif">Website & Outreach</text>
+<rect x="0" y="276" width="210" height="62" fill="#8B6730" opacity="0.1"/>
+<rect x="210" y="276" width="1460.0" height="62" fill="#FFFFFF"/>
+<line x1="0" y1="338" x2="1700" y2="338" stroke="#E8DDC8" stroke-width="1"/>
+<circle cx="20" cy="307.0" r="7" fill="#8B6730"/>
+<text x="38" y="311.0" font-size="13" font-weight="600" fill="#1F1B17" font-family="system-ui,sans-serif">GES / Booth Services</text>
+<rect x="0" y="338" width="210" height="62" fill="#7A9970" opacity="0.1"/>
+<rect x="210" y="338" width="1460.0" height="62" fill="#FBF6EC"/>
+<line x1="0" y1="400" x2="1700" y2="400" stroke="#E8DDC8" stroke-width="1"/>
+<circle cx="20" cy="369.0" r="7" fill="#7A9970"/>
+<text x="38" y="373.0" font-size="13" font-weight="600" fill="#1F1B17" font-family="system-ui,sans-serif">Vendor Orders</text>
+<rect x="0" y="400" width="210" height="62" fill="#D97757" opacity="0.1"/>
+<rect x="210" y="400" width="1460.0" height="62" fill="#FFFFFF"/>
+<line x1="0" y1="462" x2="1700" y2="462" stroke="#E8DDC8" stroke-width="1"/>
+<circle cx="20" cy="431.0" r="7" fill="#D97757"/>
+<text x="38" y="435.0" font-size="13" font-weight="600" fill="#1F1B17" font-family="system-ui,sans-serif">Matchmaking</text>
+<rect x="0" y="462" width="210" height="62" fill="#4A7A9C" opacity="0.1"/>
+<rect x="210" y="462" width="1460.0" height="62" fill="#FBF6EC"/>
+<line x1="0" y1="524" x2="1700" y2="524" stroke="#E8DDC8" stroke-width="1"/>
+<circle cx="20" cy="493.0" r="7" fill="#4A7A9C"/>
+<text x="38" y="497.0" font-size="13" font-weight="600" fill="#1F1B17" font-family="system-ui,sans-serif">Shipping & Displays</text>
+<rect x="0" y="524" width="210" height="62" fill="#1F1B17" opacity="0.1"/>
+<rect x="210" y="524" width="1460.0" height="62" fill="#FFFFFF"/>
+<line x1="0" y1="586" x2="1700" y2="586" stroke="#E8DDC8" stroke-width="1"/>
+<circle cx="20" cy="555.0" r="7" fill="#1F1B17"/>
+<text x="38" y="559.0" font-size="13" font-weight="600" fill="#1F1B17" font-family="system-ui,sans-serif">Show Days</text>
+<line x1="210.0" y1="85" x2="210.0" y2="591" stroke="#B33333" stroke-width="2" stroke-dasharray="5,3" opacity="0.7"/>
+<text x="210.0" y="80" font-size="10" text-anchor="middle" fill="#B33333" font-weight="700" font-family="system-ui,sans-serif">TODAY</text>
+<rect x="210.0" y="102" width="78.9" height="38" fill="#F0E5CC" stroke="#A07A3A" stroke-width="1.5" rx="4"/>
+<text x="218.0" y="125.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">NY deposit …</text>
+<rect x="210.0" y="102" width="335.4" height="38" fill="#F0E5CC" stroke="#A07A3A" stroke-width="1.5" rx="4"/>
+<text x="218.0" y="125.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">Credit memos processing (Zoila)</text>
+<rect x="584.9" y="102" width="532.7" height="38" fill="#F0E5CC" stroke="#A07A3A" stroke-width="1.5" rx="4"/>
+<text x="592.9" y="125.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">Payment installments (both shows)</text>
+<rect x="229.7" y="164" width="39.5" height="38" fill="#F4E8F4" stroke="#B590B5" stroke-width="1.5" rx="4"/>
+<text x="237.7" y="187.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">Earri…</text>
+<rect x="210.0" y="164" width="138.1" height="38" fill="#F4E8F4" stroke="#B590B5" stroke-width="1.5" rx="4"/>
+<text x="218.0" y="187.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">Bracelet cut decisio…</text>
+<rect x="210.0" y="164" width="295.9" height="38" fill="#F4E8F4" stroke="#B590B5" stroke-width="1.5" rx="4"/>
+<text x="218.0" y="187.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">Master product sheet + tech specs (Lloyd)</text>
+<rect x="348.1" y="164" width="236.8" height="38" fill="#F4E8F4" stroke="#B590B5" stroke-width="1.5" rx="4"/>
+<text x="356.1" y="187.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">Lookbook v8 build</text>
+<rect x="348.1" y="226" width="138.1" height="38" fill="#DBE8F0" stroke="#5E7F94" stroke-width="1.5" rx="4"/>
+<text x="356.1" y="249.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">Shopify catalog upda…</text>
+<rect x="466.5" y="226" width="493.2" height="38" fill="#DBE8F0" stroke="#5E7F94" stroke-width="1.5" rx="4"/>
+<text x="474.5" y="249.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">Pre-show retailer outreach (cycles 1-3)</text>
+<rect x="210.0" y="288" width="98.6" height="38" fill="#EFDFC8" stroke="#8B6730" stroke-width="1.5" rx="4"/>
+<text x="218.0" y="311.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">GES Expresso s…</text>
+<rect x="348.1" y="288" width="236.8" height="38" fill="#EFDFC8" stroke="#8B6730" stroke-width="1.5" rx="4"/>
+<text x="356.1" y="311.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">Backdrop design</text>
+<rect x="486.2" y="288" width="118.4" height="38" fill="#EFDFC8" stroke="#8B6730" stroke-width="1.5" rx="4"/>
+<text x="494.2" y="311.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">Submit ALL GES or…</text>
+<rect x="308.6" y="350" width="98.6" height="38" fill="#DFE8D9" stroke="#7A9970" stroke-width="1.5" rx="4"/>
+<text x="316.6" y="373.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">Cox internet o…</text>
+<rect x="308.6" y="350" width="98.6" height="38" fill="#DFE8D9" stroke="#7A9970" stroke-width="1.5" rx="4"/>
+<text x="316.6" y="373.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">Booth cleaning…</text>
+<rect x="229.7" y="412" width="177.6" height="38" fill="#F7DDD0" stroke="#D97757" stroke-width="1.5" rx="4"/>
+<text x="237.7" y="435.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">LV Brand Curation submit</text>
+<rect x="486.2" y="412" width="631.4" height="38" fill="#F7DDD0" stroke="#D97757" stroke-width="1.5" rx="4"/>
+<text x="494.2" y="435.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">NY Brand Curation (opens TBD — confirm w/ Leah)</text>
+<rect x="861.1" y="412" width="138.1" height="38" fill="#F7DDD0" stroke="#D97757" stroke-width="1.5" rx="4"/>
+<text x="869.1" y="435.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">LV appointments conf…</text>
+<rect x="308.6" y="474" width="236.8" height="38" fill="#D5E3EE" stroke="#4A7A9C" stroke-width="1.5" rx="4"/>
+<text x="316.6" y="497.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">IKEA Vegas online browse — pick dis…</text>
+<rect x="525.7" y="474" width="118.4" height="38" fill="#D5E3EE" stroke="#4A7A9C" stroke-width="1.5" rx="4"/>
+<text x="533.7" y="497.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">Ship OIYK display…</text>
+<rect x="446.8" y="474" width="374.9" height="38" fill="#D5E3EE" stroke="#4A7A9C" stroke-width="1.5" rx="4"/>
+<text x="454.8" y="497.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">GES warehouse receiving (standard rate)</text>
+<rect x="979.5" y="474" width="20.0" height="38" fill="#D5E3EE" stroke="#4A7A9C" stroke-width="1.5" rx="4"/>
+<text x="987.5" y="497.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">IKE…</text>
+<rect x="959.7" y="536" width="20.0" height="38" fill="#D6C9B8" stroke="#1F1B17" stroke-width="1.5" rx="4"/>
+<text x="967.7" y="559.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">Sat…</text>
+<rect x="979.5" y="536" width="20.0" height="38" fill="#D6C9B8" stroke="#1F1B17" stroke-width="1.5" rx="4"/>
+<text x="987.5" y="559.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">Sun…</text>
+<rect x="999.2" y="536" width="59.2" height="38" fill="#D6C9B8" stroke="#1F1B17" stroke-width="1.5" rx="4"/>
+<text x="1007.2" y="559.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">LV SHOW …</text>
+<rect x="1038.6" y="536" width="20.0" height="38" fill="#D6C9B8" stroke="#1F1B17" stroke-width="1.5" rx="4"/>
+<text x="1046.6" y="559.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">Reb…</text>
+<rect x="1591.1" y="536" width="59.2" height="38" fill="#D6C9B8" stroke="#1F1B17" stroke-width="1.5" rx="4"/>
+<text x="1599.1" y="559.0" font-size="10.5" fill="#1F1B17" font-family="system-ui,sans-serif" font-weight="500">NY SHOW</text>
+<line x1="210" y1="616" x2="1670" y2="616" stroke="#8B6730" stroke-width="1" opacity="0.4"/>
+<polygon points="387.6,606 397.6,616 387.6,626 377.6,616" fill="#B33333"/>
+<line x1="387.6" y1="90" x2="387.6" y2="606" stroke="#B33333" stroke-width="0.8" opacity="0.35" stroke-dasharray="2,3"/>
+<text x="387.6" y="642" font-size="9" text-anchor="middle" fill="#B33333" font-weight="700" font-family="system-ui,sans-serif">LV Brand</text>
+<text x="387.6" y="653" font-size="9" text-anchor="middle" fill="#B33333" font-weight="700" font-family="system-ui,sans-serif">Curation due</text>
+<polygon points="387.6,609 394.6,616 387.6,623 380.6,616" fill="#8B6730"/>
+<line x1="387.6" y1="90" x2="387.6" y2="609" stroke="#8B6730" stroke-width="0.8" opacity="0.35" stroke-dasharray="2,3"/>
+<text x="387.6" y="639" font-size="9" text-anchor="middle" fill="#8B6730" font-weight="700" font-family="system-ui,sans-serif">Cox Internet</text>
+<text x="387.6" y="650" font-size="9" text-anchor="middle" fill="#8B6730" font-weight="700" font-family="system-ui,sans-serif">deadline</text>
+<polygon points="446.8,609 453.8,616 446.8,623 439.8,616" fill="#8B6730"/>
+<line x1="446.8" y1="90" x2="446.8" y2="609" stroke="#8B6730" stroke-width="0.8" opacity="0.35" stroke-dasharray="2,3"/>
+<text x="446.8" y="639" font-size="9" text-anchor="middle" fill="#8B6730" font-weight="700" font-family="system-ui,sans-serif">GES warehouse</text>
+<text x="446.8" y="650" font-size="9" text-anchor="middle" fill="#8B6730" font-weight="700" font-family="system-ui,sans-serif">opens</text>
+<polygon points="525.7,609 532.7,616 525.7,623 518.7,616" fill="#8B6730"/>
+<line x1="525.7" y1="90" x2="525.7" y2="609" stroke="#8B6730" stroke-width="0.8" opacity="0.35" stroke-dasharray="2,3"/>
+<text x="525.7" y="639" font-size="9" text-anchor="middle" fill="#8B6730" font-weight="700" font-family="system-ui,sans-serif">Ship by</text>
+<text x="525.7" y="650" font-size="9" text-anchor="middle" fill="#8B6730" font-weight="700" font-family="system-ui,sans-serif">(Kate items)</text>
+<polygon points="584.9,606 594.9,616 584.9,626 574.9,616" fill="#B33333"/>
+<line x1="584.9" y1="90" x2="584.9" y2="606" stroke="#B33333" stroke-width="0.8" opacity="0.35" stroke-dasharray="2,3"/>
+<text x="584.9" y="642" font-size="9" text-anchor="middle" fill="#B33333" font-weight="700" font-family="system-ui,sans-serif">🔥 GES ALL</text>
+<text x="584.9" y="653" font-size="9" text-anchor="middle" fill="#B33333" font-weight="700" font-family="system-ui,sans-serif">SERVICES</text>
+<polygon points="663.8,609 670.8,616 663.8,623 656.8,616" fill="#8B6730"/>
+<line x1="663.8" y1="90" x2="663.8" y2="609" stroke="#8B6730" stroke-width="0.8" opacity="0.35" stroke-dasharray="2,3"/>
+<text x="663.8" y="639" font-size="9" text-anchor="middle" fill="#8B6730" font-weight="700" font-family="system-ui,sans-serif">Target items</text>
+<text x="663.8" y="650" font-size="9" text-anchor="middle" fill="#8B6730" font-weight="700" font-family="system-ui,sans-serif">arrive GES</text>
+<polygon points="801.9,609 808.9,616 801.9,623 794.9,616" fill="#8B6730"/>
+<line x1="801.9" y1="90" x2="801.9" y2="609" stroke="#8B6730" stroke-width="0.8" opacity="0.35" stroke-dasharray="2,3"/>
+<text x="801.9" y="639" font-size="9" text-anchor="middle" fill="#8B6730" font-weight="700" font-family="system-ui,sans-serif">Std rate ship</text>
+<text x="801.9" y="650" font-size="9" text-anchor="middle" fill="#8B6730" font-weight="700" font-family="system-ui,sans-serif">cutoff</text>
+<polygon points="979.5,609 986.5,616 979.5,623 972.5,616" fill="#8B6730"/>
+<line x1="979.5" y1="90" x2="979.5" y2="609" stroke="#8B6730" stroke-width="0.8" opacity="0.35" stroke-dasharray="2,3"/>
+<text x="979.5" y="639" font-size="9" text-anchor="middle" fill="#8B6730" font-weight="700" font-family="system-ui,sans-serif">Sun · IKEA</text>
+<text x="979.5" y="650" font-size="9" text-anchor="middle" fill="#8B6730" font-weight="700" font-family="system-ui,sans-serif">+ booth setup</text>
+<polygon points="999.2,606 1009.2,616 999.2,626 989.2,616" fill="#B33333"/>
+<line x1="999.2" y1="90" x2="999.2" y2="606" stroke="#B33333" stroke-width="0.8" opacity="0.35" stroke-dasharray="2,3"/>
+<text x="999.2" y="642" font-size="9" text-anchor="middle" fill="#B33333" font-weight="700" font-family="system-ui,sans-serif">LV SHOW</text>
+<text x="999.2" y="653" font-size="9" text-anchor="middle" fill="#B33333" font-weight="700" font-family="system-ui,sans-serif">OPEN</text>
+<polygon points="1591.1,606 1601.1,616 1591.1,626 1581.1,616" fill="#B33333"/>
+<line x1="1591.1" y1="90" x2="1591.1" y2="606" stroke="#B33333" stroke-width="0.8" opacity="0.35" stroke-dasharray="2,3"/>
+<text x="1591.1" y="642" font-size="9" text-anchor="middle" fill="#B33333" font-weight="700" font-family="system-ui,sans-serif">NY SHOW</text>
+<text x="1591.1" y="653" font-size="9" text-anchor="middle" fill="#B33333" font-weight="700" font-family="system-ui,sans-serif">OPEN</text>
+</svg>
+</div>
+
+<div class="gantt-legend">
+<div class="item"><span class="dot" style="background:#A07A3A"></span>Payment & Finance</div><div class="item"><span class="dot" style="background:#B590B5"></span>Samples & Product</div><div class="item"><span class="dot" style="background:#5E7F94"></span>Website & Outreach</div><div class="item"><span class="dot" style="background:#8B6730"></span>GES / Booth Services</div><div class="item"><span class="dot" style="background:#7A9970"></span>Vendor Orders</div><div class="item"><span class="dot" style="background:#D97757"></span>Matchmaking</div><div class="item"><span class="dot" style="background:#4A7A9C"></span>Shipping & Displays</div><div class="item"><span class="dot" style="background:#1F1B17"></span>Show Days</div>
+</div>
+
+<div class="milestone-legend">
+<span><span class="diamond hard"></span> Hard deadline (no recovery)</span>
+<span><span class="diamond soft"></span> Soft deadline (workaround available)</span>
+<span style="color: var(--oiyk-red);"><b>| — |</b> Today marker (dashed red)</span>
+</div>
+
+<h3 style="margin-top: 30px;">The four deadlines that can't slip</h3>
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+<div style="background: linear-gradient(135deg, #FBE9E9, #FFF4DF); border-left: 5px solid var(--oiyk-red); padding: 14px 18px; border-radius: 4px;">
+<div style="font-size: 10pt; color: var(--oiyk-red); font-weight: 700; letter-spacing: 0.12em;">JUL 10 · FRI</div>
+<div style="font-family: Georgia, serif; font-size: 14pt; font-weight: 600; margin: 4px 0;">LV Brand Curation</div>
+<div style="font-size: 10pt; color: var(--oiyk-gold-deep);">Application submission = premium buyer access</div>
+</div>
+<div style="background: linear-gradient(135deg, #D5E3EE, #F5EDE1); border-left: 5px solid #4A7A9C; padding: 14px 18px; border-radius: 4px;">
+<div style="font-size: 10pt; color: #4A7A9C; font-weight: 700; letter-spacing: 0.12em;">JUL 17 · FRI</div>
+<div style="font-family: Georgia, serif; font-size: 14pt; font-weight: 600; margin: 4px 0;">📦 Ship OIYK kit</div>
+<div style="font-size: 10pt; color: var(--oiyk-gold-deep);">Trays, mannequins, display items to GES warehouse</div>
+</div>
+<div style="background: linear-gradient(135deg, #FBE9E9, #FFF4DF); border-left: 5px solid var(--oiyk-red); padding: 14px 18px; border-radius: 4px;">
+<div style="font-size: 10pt; color: var(--oiyk-red); font-weight: 700; letter-spacing: 0.12em;">JUL 20 · MON</div>
+<div style="font-family: Georgia, serif; font-size: 14pt; font-weight: 600; margin: 4px 0;">🔥 GES ALL SERVICES</div>
+<div style="font-size: 10pt; color: var(--oiyk-gold-deep);">Backdrop + all booth orders. No graphics after.</div>
+</div>
+<div style="background: linear-gradient(135deg, #FBE9E9, #FFF4DF); border-left: 5px solid var(--oiyk-red); padding: 14px 18px; border-radius: 4px;">
+<div style="font-size: 10pt; color: var(--oiyk-red); font-weight: 700; letter-spacing: 0.12em;">AUG 10-12</div>
+<div style="font-family: Georgia, serif; font-size: 14pt; font-weight: 600; margin: 4px 0;">LV Show + Rebook</div>
+<div style="font-size: 10pt; color: var(--oiyk-gold-deep);">On-floor 2027 rebook = discount window</div>
+</div>
+</div>
+
+</section>
+
+<!-- =============== SLIDE 2: WEEK DEEP DIVE + PANELS =============== -->
+<section class="slide">
+
+<h2>Week-by-week action deep dive</h2>
+<p style="color: var(--oiyk-gold-deep); font-style: italic; margin-top: 4px;">Click any "↗ open" tag to jump straight to the resource.</p>
+
+<div class="week-grid">
+<div class="week-card priority-high">
+<div class="week-header">
+<div class="week-num">Week 1</div>
+<div class="week-name">This week · Jul 1 – 5</div>
+<div class="week-vibe">critical unlock week</div>
+</div>
+<div class="week-body">
+<h4 class="week-section">Today (Wed Jul 1)</h4>
+<ul class="week-actions">
+<li>
+<span class="action">2:30 PM ET — Leah Mazzola call</span>
+<div class="action-note">Brand name in CRM · NY deposit unblock · CAM lighting (now: rent clamp lights from GES) · booth package inclusions · Lead Retrieval pricing</div>
+</li>
+<li>
+<span class="action">Post-Leah recap email — same day</span>
+<div class="action-note">Written confirmation of what Leah committed to</div>
+</li>
+</ul>
+<h4 class="week-section">Thu Jul 2</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Earring sample photography</span>
+<div class="action-note">Kate + team</div>
+</li>
+</ul>
+<h4 class="week-section">Fri Jul 3</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Submit LV Brand Curation (if brand name fix confirmed)</span> <a href="https://join.magicfashionevents.com/form-lv-exhib-curation" target="_blank" class="inline-link">↗ open</a>
+<div class="action-note">Deadline Jul 10 · form linked</div>
+</li>
+<li>
+<span class="action">NY deposit paid (target)</span> <a href="https://payments.informaexhibitions.com" target="_blank" class="inline-link">↗ open</a>
+<div class="action-note">$2,248.31 via portal or phone</div>
+</li>
+</ul>
+<h4 class="week-section">This week</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Log into GES Expresso via ERC</span> <a href="https://lv0826.exh.mapyourshow.com" target="_blank" class="inline-link">↗ open</a>
+<div class="action-note">Familiarize with portal — clamp light rental happens here</div>
+</li>
+<li>
+<span class="action">Continue master product sheet with Lloyd</span>
+</li>
+</ul>
+</div></div>
+<div class="week-card priority-high">
+<div class="week-header">
+<div class="week-num">Week 2</div>
+<div class="week-name">Jul 6 – 12</div>
+<div class="week-vibe">product info + vendor orders</div>
+</div>
+<div class="week-body">
+<h4 class="week-section">Product & content</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Master product sheet complete (Lloyd + Dan)</span>
+</li>
+<li>
+<span class="action">Tech spec sheets to China factory for populating</span>
+</li>
+<li>
+<span class="action">Bracelet cut decision locked (Kate)</span>
+<div class="action-note">Which 3-5 dropped, 10-12 survive</div>
+</li>
+<li>
+<span class="action">Begin Lookbook v8 build</span>
+<div class="action-note">New samples featured</div>
+</li>
+<li>
+<span class="action">Begin Shopify catalog updates</span> <a href="https://onlyifyouknow.com" target="_blank" class="inline-link">↗ open</a>
+</li>
+</ul>
+<h4 class="week-section">Vendor orders (Jul 10 deadlines)</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Cox Business internet — order</span> <a href="https://www.tradeshows.coxhn.net/" target="_blank" class="inline-link">↗ open</a>
+<div class="action-note">Wi-Fi for iPad CRM + Lead Insights scanner</div>
+</li>
+<li>
+<span class="action">Booth cleaning — order if desired (UnitedHQ dosorio@unitedhq.com)</span>
+</li>
+<li>
+<span class="action">🔥 LV Brand Curation FINAL: Fri Jul 10</span>
+<div class="action-note">Submit by end of week</div>
+</li>
+</ul>
+<h4 class="week-section">Booth prep</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Contact GES Concierge for backdrop specs (MAGICConcierge@ges.com)</span>
+<div class="action-note">File format, dimensions, color profile, early-bird credit</div>
+</li>
+<li>
+<span class="action">Begin backdrop design</span>
+<div class="action-note">Pearl Violet + logo + F/W 2026</div>
+</li>
+<li>
+<span class="action">IKEA Las Vegas — online browse for display items</span> <a href="https://www.ikea.com/us/en/stores/las-vegas/" target="_blank" class="inline-link">↗ open</a>
+<div class="action-note">See list below (trays, ledges, mirrors, small tables)</div>
+</li>
+</ul>
+</div></div>
+<div class="week-card priority-critical">
+<div class="week-header">
+<div class="week-num">Week 3</div>
+<div class="week-name">Jul 13 – 19</div>
+<div class="week-vibe">build, submit, ship</div>
+</div>
+<div class="week-body">
+<h4 class="week-section">Content complete</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Lookbook v8 finalize</span>
+</li>
+<li>
+<span class="action">Line sheet update for outreach + booth handout</span>
+</li>
+<li>
+<span class="action">Website product updates live on Shopify</span> <a href="https://onlyifyouknow.com" target="_blank" class="inline-link">↗ open</a>
+</li>
+<li>
+<span class="action">Retailer outreach cycle 1 (~Mon Jul 14)</span>
+<div class="action-note">~50-100 target buyers</div>
+</li>
+</ul>
+<h4 class="week-section">Booth</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Hero piece selection for backdrop</span>
+<div class="action-note">3-5 pieces anchor the visual (Kate + Dan)</div>
+</li>
+<li>
+<span class="action">Finalize backdrop design</span>
+</li>
+<li>
+<span class="action">Order clamp lights + additional table + GES electrical via Expresso</span> <a href="https://lv0826.exh.mapyourshow.com" target="_blank" class="inline-link">↗ open</a>
+</li>
+</ul>
+<h4 class="week-section">🚚 Shipping physical items (Kate's ask)</h4>
+<ul class="week-actions">
+<li>
+<span class="action">📦 Ship OIYK display kit to GES warehouse by Fri Jul 17</span>
+<div class="action-note">Trays, mannequins, tablecloth, props. See shipping panel below for address + rates.</div>
+</li>
+<li>
+<span class="action">Jul 13 — GES advance warehouse OPEN</span>
+<div class="action-note">Earliest date GES accepts inbound</div>
+</li>
+<li>
+<span class="action">Target arrival: Fri Jul 24</span>
+<div class="action-note">Gives 7-day buffer before Jul 31 rate cutoff</div>
+</li>
+</ul>
+<h4 class="week-section">Travel milestones</h4>
+<ul class="week-actions">
+<li>
+<span class="action">~Jul 11 — Westgate auto-charges card (~$240) — watch statement</span>
+</li>
+<li>
+<span class="action">Jul 14 — onPeak hotel changes cutoff</span>
+</li>
+</ul>
+</div></div>
+<div class="week-card priority-critical">
+<div class="week-header">
+<div class="week-num">Week 4</div>
+<div class="week-name">Jul 20 – 26</div>
+<div class="week-vibe">🔥 HARD DEADLINE WEEK</div>
+</div>
+<div class="week-body">
+<h4 class="week-section">🔥 Monday Jul 20 by 11:59 PM</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Submit GES backdrop file</span>
+<div class="action-note">GES will NOT accept graphic orders after this date</div>
+</li>
+<li>
+<span class="action">Submit ALL GES orders</span>
+<div class="action-note">Furniture, labor, electrical, clamp lights, additional items</div>
+</li>
+<li>
+<span class="action">Package furniture selection locked</span>
+</li>
+<li>
+<span class="action">Floor plan / adjacency requests finalized with Zoila</span>
+</li>
+</ul>
+<h4 class="week-section">Rest of week</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Retailer outreach cycle 2 — booth # + show special (~Jul 22)</span>
+</li>
+<li>
+<span class="action">Confirm OIYK display kit arrived at GES warehouse (target Jul 24)</span>
+<div class="action-note">Tracking + weight for drayage estimate</div>
+</li>
+<li>
+<span class="action">Jul 25 — Hotel cancellation cutoff (14 days before)</span>
+<div class="action-note">After: $120+tax per room penalty</div>
+</li>
+<li>
+<span class="action">Jul 27 — Computer/AV discount deadline (likely skip)</span>
+</li>
+</ul>
+</div></div>
+<div class="week-card priority-high">
+<div class="week-header">
+<div class="week-num">Week 5-6</div>
+<div class="week-name">Jul 27 – Aug 9</div>
+<div class="week-vibe">final prep + travel</div>
+</div>
+<div class="week-body">
+<h4 class="week-section">Week 5 (Jul 27 – Aug 2)</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Retailer outreach cycle 3 — final pre-show ping (~Aug 4)</span>
+</li>
+<li>
+<span class="action">Jul 28 — NY invoice installment 3 due</span> <a href="https://payments.informaexhibitions.com" target="_blank" class="inline-link">↗ open</a>
+<div class="action-note">Pay based on credit memo status</div>
+</li>
+<li>
+<span class="action">Jul 31 — Last day GES warehouse without additional fee</span>
+<div class="action-note">Non-standard rate applies Aug 1-5</div>
+</li>
+<li>
+<span class="action">Print IKEA Vegas shopping list — finalize what we'll pick up Sunday</span>
+</li>
+</ul>
+<h4 class="week-section">Week 6 (Aug 3 – 9)</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Matchmaking appointment confirmations arrive (~1 week pre-show)</span>
+</li>
+<li>
+<span class="action">Team travel + logistics finalized</span>
+</li>
+<li>
+<span class="action">Pack booth-specific items (samples, business cards, iPads, chargers)</span>
+<div class="action-note">Everything else already shipped to GES</div>
+</li>
+<li>
+<span class="action">🛫 Fri Aug 7 or Sat Aug 8 — team travel to Vegas (evening arrival Sat)</span>
+</li>
+<li>
+<span class="action">Sat Aug 8 · 4 PM PT — Westgate check-in (Dan handles for group)</span>
+</li>
+</ul>
+</div></div>
+<div class="week-card priority-critical">
+<div class="week-header">
+<div class="week-num">Week 7</div>
+<div class="week-name">🎯 Aug 10 – 12 · LV SHOW WEEK</div>
+<div class="week-vibe">setup + 3 show days</div>
+</div>
+<div class="week-body">
+<h4 class="week-section">Sun Aug 9 — SETUP DAY</h4>
+<ul class="week-actions">
+<li>
+<span class="action">🛍 8 AM – 12 PM: IKEA Las Vegas run</span> <a href="https://www.ikea.com/us/en/stores/las-vegas/" target="_blank" class="inline-link">↗ open</a>
+<div class="action-note">6500 IKEA Way, Las Vegas NV 89118 · ~15 min from LVCC · finalize display</div>
+</li>
+<li>
+<span class="action">12 PM – 6 PM: Booth setup at LVCC</span>
+<div class="action-note">Unpack GES-shipped kit + IKEA items + set up backdrop, shelves, product</div>
+</li>
+<li>
+<span class="action">1 PM: 'Clean floor' policy — crates labeled + cleared</span>
+</li>
+</ul>
+<h4 class="week-section">Mon Aug 10 — Day 1</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Show floor 8-9 AM setup access · 9 AM show OPEN</span>
+</li>
+<li>
+<span class="action">Lead Insights scanner ON from minute 1</span>
+</li>
+<li>
+<span class="action">Matchmaking appointments begin</span>
+</li>
+</ul>
+<h4 class="week-section">Tue Aug 11 — Day 2</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Peak matchmaking day</span>
+</li>
+<li>
+<span class="action">Mid-show metrics checkpoint vs. dashboard</span>
+</li>
+</ul>
+<h4 class="week-section">Wed Aug 12 — Day 3 · LAST DAY</h4>
+<ul class="week-actions">
+<li>
+<span class="action">🔥 REBOOK 2027 LV + NY on-floor with Zoila</span>
+<div class="action-note">This is where the real discounts unlock (per Zoila directly)</div>
+</li>
+<li>
+<span class="action">Hotel checkout 11 AM</span>
+</li>
+<li>
+<span class="action">Show closes 4 PM · pack down begins</span>
+</li>
+<li>
+<span class="action">Ship GES-return kit back to OIYK warehouse for NY reuse</span>
+</li>
+</ul>
+</div></div>
+<div class="week-card priority-med">
+<div class="week-header">
+<div class="week-num">Week 8-10</div>
+<div class="week-name">Aug 13 – Sep 6</div>
+<div class="week-vibe">between-show sprint</div>
+</div>
+<div class="week-body">
+<h4 class="week-section">Immediate post-LV (Week 8)</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Same-week thank-yous to all LV leads</span>
+</li>
+<li>
+<span class="action">Enter leads into CRM + follow-up sequences</span>
+</li>
+<li>
+<span class="action">Post-show performance report</span>
+<div class="action-note">Compare vs. targets, inform NY strategy</div>
+</li>
+</ul>
+<h4 class="week-section">Between shows (Weeks 9-10)</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Refine booth setup based on LV learnings</span>
+</li>
+<li>
+<span class="action">NY Brand Curation application submitted</span>
+<div class="action-note">Deadline confirmed w/ Leah in Jul 1 call</div>
+</li>
+<li>
+<span class="action">Retailer follow-up outreach — LV attendees who missed appointments</span>
+</li>
+<li>
+<span class="action">Ship OIYK display kit to Javits (or hand-carry — we're local)</span>
+</li>
+</ul>
+</div></div>
+<div class="week-card priority-critical">
+<div class="week-header">
+<div class="week-num">Week 11</div>
+<div class="week-name">🎯 Sep 8 – 11 · NY SHOW WEEK</div>
+<div class="week-vibe">premium buyer show</div>
+</div>
+<div class="week-body">
+<h4 class="week-section">Setup + Days</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Sep 8 (Tue) — Move-in + booth setup at Javits</span>
+</li>
+<li>
+<span class="action">Sep 9-11 — Show days at Edition @ Coterie</span>
+<div class="action-note">Anthropologie, Saks, Net-a-Porter HQ audience</div>
+</li>
+<li>
+<span class="action"><5% overlap w/ LV buyers — different audience</span>
+</li>
+<li>
+<span class="action">Sep 11 (Fri) — REBOOK 2027 NY on-floor</span>
+</li>
+</ul>
+<h4 class="week-section">Post-NY</h4>
+<ul class="week-actions">
+<li>
+<span class="action">Combined LV + NY performance report</span>
+</li>
+<li>
+<span class="action">2027 planning begins</span>
+<div class="action-note">Kate's $100K annual budget rolls forward</div>
+</li>
+<li>
+<span class="action">Retrospective — what worked, what to change for 2027</span>
+</li>
+</ul>
+</div></div>
+</div>
+
+<!-- SHIPPING PANEL FOR KATE -->
+
+<div class="info-panel shipping-panel">
+<div class="info-panel-label">📦 Kate's answer · shipping OIYK display items to LV</div>
+<h3 style="margin-top:8px;">Ship-by dates + warehouse address</h3>
+<div class="two-col-tight">
+<div>
+<h4>Timeline</h4>
+<ul>
+<li><b>Earliest ship-to date accepted:</b> Jul 13 (GES warehouse opens)</li>
+<li><b>Target arrival:</b> Fri Jul 24 (7-day buffer)</li>
+<li><b>Recommended ship-by:</b> Fri Jul 17 (ground) or Wed Jul 22 (2-day)</li>
+<li><b>Standard rate cutoff:</b> Fri Jul 31 (last day without penalty)</li>
+<li><b>Non-standard rate:</b> Aug 1–5 (accepted but +$0.31/lb)</li>
+<li><b>Direct-to-show-site accepted:</b> from Aug 6</li>
+</ul>
+</div>
+<div>
+<h4>Ship-to address</h4>
+<pre style="background:#FFF; padding:10px 14px; border-radius:4px; font-family:Menlo,monospace; font-size:10pt; margin:0; line-height:1.5;">
+[Exhibiting Company: Only If You Know]
+c/o GES (Global Experience Specialists)
+MAGIC – Las Vegas Convention Center
+Booth #___/Hall___  (add booth # when known)
+7000 Lindell Road
+Las Vegas, NV 89118</pre>
+<p style="font-size:10pt; margin-top:10px;"><b>Drayage rates (what GES charges to move it from warehouse to booth):</b><br>
+· Standard: $1.16/lb · 25+ lb minimum<br>
+· Non-standard: $1.47/lb · 25+ lb minimum<br>
+· Flat rate: $30.30 per package under 25 lb</p>
+</div>
+</div>
+<h4 style="margin-top:16px;">What to ship in advance</h4>
+<ul>
+<li>Jewelry display trays</li>
+<li>Mannequins / busts / display fixtures</li>
+<li>Tablecloths, backdrop props</li>
+<li>Signage that's not on the backdrop (business cards holders, small signs)</li>
+<li>Personal touches from OIYK studio (any small decor)</li>
+<li><b>NOT the jewelry itself</b> — Kate + team hand-carry the actual product for insurance/security</li>
+</ul>
+</div>
+
+
+<!-- IKEA PANEL -->
+
+<div class="info-panel ikea-panel">
+<div class="info-panel-label">🛍 Sunday Aug 9 · IKEA Las Vegas run</div>
+<h3 style="margin-top:8px;">Address · timing · shopping list (review + finalize before we go)</h3>
+<div class="two-col-tight">
+<div>
+<h4>Logistics</h4>
+<ul>
+<li><b>Store:</b> IKEA Las Vegas · 6500 IKEA Way, Las Vegas NV 89118</li>
+<li><b>~15 min drive</b> from LVCC and Westgate — plan Uber XL or rental car for the run</li>
+<li><b>Time window:</b> Sun Aug 9, 8 AM – 12 PM · finish by lunch so we can start setup at LVCC PM</li>
+<li><b>Store hours (typical):</b> 10 AM – 9 PM Sun — <b>confirm hours online day-of</b></li>
+<li><b>Approx budget:</b> $200–500 · split between Dan + Kate; save receipts for business expense</li>
+</ul>
+</div>
+<div>
+<h4>What to look for (browse online first · Week 2)</h4>
+<ul>
+<li><b>MOSSLANDA picture ledges</b> — great for jewelry display against backdrop</li>
+<li><b>Small side tables</b> — LACK ($15), NORDLI drawer units</li>
+<li><b>Trays</b> — BJUDA, KLIPSK, SVIT</li>
+<li><b>Small mirrors</b> — HÖNEFOSS, VÄNSTA</li>
+<li><b>Tea light holders / small candles</b> for warmth</li>
+<li><b>Small vases</b> for props / aesthetic</li>
+<li><b>LED strip lights (LEDBERG, DIODER)</b> as accent lighting (in addition to GES clamp lights)</li>
+<li><b>KVITTRA / BILLINGEN drawer knobs</b> — jewelry hooks alternative</li>
+<li><b>Small plants / faux plants</b> for softness</li>
+</ul>
+</div>
+</div>
+<p style="font-size:10.5pt; margin-top:14px; padding:10px 14px; background:#FFF; border-radius:4px; border-left:3px solid var(--oiyk-gold);"><b>Plan:</b> Kate + Dan spend Week 2 browsing IKEA.com and creating a shopping list. Print the list Saturday before travel. Whoever's fresh Sunday AM runs the store (Kate suggested she'll do it). Setup team stays at LVCC to receive GES-warehouse-shipped kit.</p>
+</div>
+
+
+<h2 style="margin-top: 40px;">Quick links · one-click access</h2>
+<div class="quick-links">
+<a href="https://lv0826.exh.mapyourshow.com" target="_blank" class="quick-link"><div class="ql-title">LV Exhibitor Resource Center (ERC)</div><div class="ql-desc">Master hub — GES Expresso, profile, team access, product categories</div></a>
+<a href="https://payments.informaexhibitions.com" target="_blank" class="quick-link"><div class="ql-title">Informa Payments Portal</div><div class="ql-desc">Credit card payment for invoices · account 70448583</div></a>
+<a href="https://join.magicfashionevents.com/form-lv-exhib-curation" target="_blank" class="quick-link"><div class="ql-title">LV Brand Curation Application</div><div class="ql-desc">Matchmaking application — deadline Jul 10</div></a>
+<a href="https://www.tradeshows.coxhn.net/" target="_blank" class="quick-link"><div class="ql-title">Cox Business (Internet)</div><div class="ql-desc">Booth Wi-Fi ordering — deadline Jul 10</div></a>
+<a href="https://www.ikea.com/us/en/stores/las-vegas/" target="_blank" class="quick-link"><div class="ql-title">IKEA Las Vegas</div><div class="ql-desc">Sunday Aug 9 · 6500 IKEA Way · finalize display kit</div></a>
+<a href="https://onlyifyouknow.com" target="_blank" class="quick-link"><div class="ql-title">OIYK Website (Shopify)</div><div class="ql-desc">Product catalog updates before outreach</div></a>
+</div>
+
+<h2 style="margin-top: 40px;">Contact directory</h2>
+<table class="contact-table">
+<thead>
+<tr><th>Name</th><th>Role</th><th>Email</th><th>Phone</th></tr>
+</thead>
+<tbody>
+<tr><td><b>Leah Mazzola</b></td><td>Account Executive, Informa</td><td>Leah.Mazzola@informa.com</td><td>+1 (424) 508-1351</td></tr>
+<tr><td><b>Zoila Benavides</b></td><td>Director, Key Accounts</td><td>Zoila.Benavides@informa.com</td><td></td></tr>
+<tr><td><b>Nycel Ramiro-Santos</b></td><td>Informa</td><td>Nycel.Ramiro@informa.com</td><td></td></tr>
+<tr><td><b>Credit Control (Informa)</b></td><td>Payment issues</td><td>creditcontrolUS@informa.com</td><td>+1 212 600 3255</td></tr>
+<tr><td><b>Exhibitor Resource / Directory</b></td><td>Booth listing, name fixes</td><td>exhibit@fashionbyinforma.com</td><td></td></tr>
+<tr><td><b>GES Concierge</b></td><td>Booth services, backdrop, warehouse</td><td>MAGICConcierge@ges.com</td><td>(702) 718-2112</td></tr>
+<tr><td><b>Westgate Las Vegas</b></td><td>Hotel · Group ID 4235448</td><td></td><td>1-702-732-5111</td></tr>
+<tr><td><b>onPeak Support</b></td><td>Hotel management</td><td>magic@onpeaksupport.com</td><td>(800) 254-7188</td></tr>
+</tbody>
+</table>
+
+<div class="doc-footer">
+Only If You Know · MAGIC LV + NY 2026 Master Plan · Living document (updated Jul 1 PM)<br>
+Contact: dan@onlyifyouknow.com · 917-669-3717 · Informa Account #70448583
+</div>
+
+</section>
+
+</body>
+</html>
